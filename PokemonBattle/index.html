@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pokémon Battle</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+    <h1>Pokémon Battle</h1>
+
+    <div id="battlefield">
+        <div class="pokemon player">
+            <h2 id="player-name">You</h2>
+            <img id="player-img" src="" alt="Your Pokémon" />
+            <p>HP: <span id="player-hp">100</span></p>
+        </div>
+
+        <div class="pokemon enemy">
+            <h2 id="enemy-name">Enemy</h2>
+            <img id="enemy-img" src="" alt="Enemy Pokémon" />
+            <p>HP: <span id="enemy-hp">100</span></p>
+        </div>
+    </div>
+
+    <div id="actions">
+        <h3>Choose a Move</h3>
+        <div id="move-buttons"></div>
+    </div>
+
+    <p id="log"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

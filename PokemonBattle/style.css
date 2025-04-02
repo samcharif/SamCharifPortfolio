@@ -1,0 +1,45 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to bottom, #def, #fff);
+    text-align: center;
+    padding: 2em;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+#battlefield {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1em;
+}
+
+.pokemon {
+    border: 2px solid #888;
+    border-radius: 10px;
+    padding: 1em;
+    background: #f9f9f9;
+    width: 40%;
+}
+
+.pokemon img {
+    width: 100px;
+    height: 100px;
+}
+
+#move-buttons button {
+    margin: 0.5em;
+    padding: 0.75em 1.5em;
+    font-weight: bold;
+    background: #ffcb05;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#log {
+    margin-top: 1em;
+    font-weight: bold;
+}
