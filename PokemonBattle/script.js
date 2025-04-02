@@ -8,25 +8,48 @@ const typeChart = {
     Steel: {},
 };
 
-// === GET MULTIPLIER FUNCTION ===
 function getMultiplier(attackerType, defenderType) {
     return typeChart[attackerType]?.[defenderType] || 1;
 }
 
-// === PLAYER POKÉMON ===
-const playerPokemon = {
-    name: "Pikachu",
-    type: "Electric",
-    hp: 100,
-    img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
-    moves: [
-        { name: "Thunderbolt", type: "Electric", damage: 25 },
-        { name: "Quick Attack", type: "Normal", damage: 15 },
-        { name: "Iron Tail", type: "Steel", damage: 20 },
-    ]
-};
+// === PLAYER OPTIONS ===
+const playerRoster = [
+    {
+        name: "Pikachu",
+        type: "Electric",
+        hp: 100,
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
+        moves: [
+            { name: "Thunderbolt", type: "Electric", damage: 25 },
+            { name: "Quick Attack", type: "Normal", damage: 15 },
+            { name: "Iron Tail", type: "Steel", damage: 20 },
+        ]
+    },
+    {
+        name: "Charmander",
+        type: "Fire",
+        hp: 100,
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png",
+        moves: [
+            { name: "Flamethrower", type: "Fire", damage: 25 },
+            { name: "Scratch", type: "Normal", damage: 10 },
+            { name: "Ember", type: "Fire", damage: 20 },
+        ]
+    },
+    {
+        name: "Squirtle",
+        type: "Water",
+        hp: 100,
+        img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png",
+        moves: [
+            { name: "Water Gun", type: "Water", damage: 20 },
+            { name: "Tackle", type: "Normal", damage: 10 },
+            { name: "Bubble", type: "Water", damage: 15 },
+        ]
+    }
+];
 
-// === ENEMY ROSTER ===
+// === ENEMY OPTIONS ===
 const enemyRoster = [
     {
         name: "Charmander",
@@ -68,31 +91,82 @@ const enemyPokemon = JSON.parse(JSON.stringify(
     enemyRoster[Math.floor(Math.random() * enemyRoster.length)]
 ));
 
-// === CURRENT HP ===
-let playerHP = playerPokemon.hp;
+const playerPokemon = {}; // selected by player
+let playerHP = 100;
 let enemyHP = enemyPokemon.hp;
 
-// === INIT DISPLAY ===
-document.getElementById("player-name").textContent = playerPokemon.name;
-document.getElementById("enemy-name").textContent = enemyPokemon.name;
-document.getElementById("player-img").src = playerPokemon.img;
-document.getElementById("enemy-img").src = enemyPokemon.img;
+// === SELECT SCREEN LOGIC ===
+document.querySelectorAll('#pokemon-select-screen button').forEach(btn => {
+    btn.addEventListener('click', e => {
+        const choice = e.target.dataset.name;
+        const selected = playerRoster.find(p => p.name === choice);
+        Object.assign(playerPokemon, JSON.parse(JSON.stringify(selected)));
 
-// === LOG MESSAGE (WITH DELAY) ===
-function logMessage(msg, delay = 0) {
-    setTimeout(() => {
-        document.getElementById("log").textContent = msg;
-    }, delay);
+        document.getElementById("pokemon-select-screen").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+        setupBattle();
+    });
+});
+
+// === INITIAL SETUP ===
+function setupBattle() {
+    playerHP = playerPokemon.hp;
+    enemyHP = enemyPokemon.hp;
+
+    // Load sprites
+    document.getElementById("player-back").src = playerPokemon.img;
+    document.getElementById("enemy-front").src = enemyPokemon.img;
+
+    // Load names
+    document.getElementById("player-name").textContent = playerPokemon.name;
+    document.getElementById("enemy-name").textContent = enemyPokemon.name;
+
+    // Load HP
+    updateHP();
+
+    // Load move buttons
+    const moveButtonsDiv = document.getElementById("move-buttons");
+    moveButtonsDiv.innerHTML = "";
+    playerPokemon.moves.forEach((move, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = move.name;
+        btn.addEventListener("click", () => {
+            playerTurn(index);
+        });
+        moveButtonsDiv.appendChild(btn);
+    });
 }
 
-// === DISABLE MOVE BUTTONS ===
+// === ANIMATION FUNCTION ===
+function animateHit(id) {
+    const el = document.getElementById(id);
+    el.classList.add("animate-hit");
+    setTimeout(() => el.classList.remove("animate-hit"), 300);
+}
+
+// === UPDATE HP DISPLAY ===
+function updateHP() {
+    document.getElementById("player-hp").textContent = playerHP;
+    document.getElementById("enemy-hp").textContent = enemyHP;
+
+    document.getElementById("player-hp-bar").style.width = `${playerHP}%`;
+    document.getElementById("enemy-hp-bar").style.width = `${enemyHP}%`;
+}
+
+// === DISABLE/ENABLE BUTTONS ===
 function disableButtons() {
     document.querySelectorAll("#move-buttons button").forEach(btn => btn.disabled = true);
 }
 
-// === ENABLE MOVE BUTTONS ===
 function enableButtons() {
     document.querySelectorAll("#move-buttons button").forEach(btn => btn.disabled = false);
+}
+
+// === LOG MESSAGE (W/ DELAY) ===
+function logMessage(msg, delay = 0) {
+    setTimeout(() => {
+        document.getElementById("log").textContent = msg;
+    }, delay);
 }
 
 // === PLAYER TURN ===
@@ -106,15 +180,17 @@ function playerTurn(moveIndex) {
     enemyHP -= damage;
     if (enemyHP < 0) enemyHP = 0;
 
+    animateHit("enemy-front");
     logMessage(`${playerPokemon.name} used ${move.name}!`, 0);
     setTimeout(() => {
         logMessage(`It dealt ${damage} damage!`, 1000);
-        document.getElementById("enemy-hp").textContent = enemyHP;
+        updateHP();
     }, 1000);
 
     if (enemyHP <= 0) {
         setTimeout(() => {
             logMessage(`${enemyPokemon.name} fainted! You win!`, 2000);
+            disableButtons();
         }, 2000);
         return;
     }
@@ -131,10 +207,11 @@ function enemyTurn() {
     playerHP -= damage;
     if (playerHP < 0) playerHP = 0;
 
+    animateHit("player-back");
     logMessage(`${enemyPokemon.name} used ${move.name}!`, 0);
     setTimeout(() => {
         logMessage(`It dealt ${damage} damage!`, 1000);
-        document.getElementById("player-hp").textContent = playerHP;
+        updateHP();
     }, 1000);
 
     if (playerHP <= 0) {
@@ -149,13 +226,8 @@ function enemyTurn() {
     }
 }
 
-// === RENDER MOVE BUTTONS ===
-const moveButtonsDiv = document.getElementById("move-buttons");
-playerPokemon.moves.forEach((move, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = move.name;
-    btn.addEventListener("click", () => {
-        playerTurn(index);
-    });
-    moveButtonsDiv.appendChild(btn);
-});
+function animateHit(spriteId) {
+    const el = document.getElementById(spriteId);
+    el.classList.add("animate-hit");
+    setTimeout(() => el.classList.remove("animate-hit"), 300);
+}
