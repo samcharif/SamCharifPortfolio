@@ -1,23 +1,30 @@
+<!-- Pokémon Battle Layout -->
 <div id="battlefield">
+    <!-- Player Side -->
     <div class="side player-side">
-        <img id="player-back" class="sprite back" src="" alt="Your Pokémon" />
+        <div class="sprite-wrapper">
+            <img id="player-back" class="sprite back" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png" alt="Your Pokémon" />
+        </div>
         <div class="hp-bar">
-            <span id="player-name">You</span>
+            <strong id="player-name">Pikachu</strong>
             <div class="bar">
                 <div id="player-hp-bar" class="bar-fill"></div>
             </div>
-            <span id="player-hp">100</span> HP
+            <span><span id="player-hp">100</span> HP</span>
         </div>
     </div>
 
+    <!-- Enemy Side -->
     <div class="side enemy-side">
-        <img id="enemy-front" class="sprite front" src="" alt="Enemy Pokémon" />
+        <div class="sprite-wrapper">
+            <img id="enemy-front" class="sprite front" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Enemy Pokémon" />
+        </div>
         <div class="hp-bar">
-            <span id="enemy-name">Enemy</span>
+            <strong id="enemy-name">Charmander</strong>
             <div class="bar">
                 <div id="enemy-hp-bar" class="bar-fill"></div>
             </div>
-            <span id="enemy-hp">100</span> HP
+            <span><span id="enemy-hp">100</span> HP</span>
         </div>
     </div>
 </div>
