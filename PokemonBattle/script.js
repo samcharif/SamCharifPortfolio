@@ -64,7 +64,6 @@ function renderPokemonSelection() {
         titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
     }
 }
-}
 
 function selectPokemon(selected) {
     playerPokemon = selected;
