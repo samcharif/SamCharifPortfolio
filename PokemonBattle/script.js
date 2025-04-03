@@ -79,29 +79,41 @@ function selectPokemon(selected) {
 
 function startBattle() {
     const vsScreen = document.getElementById("vs-screen");
-    vsScreen.style.display = "flex";
+    const vsPlayerImg = document.getElementById("vs-player");
+    const vsEnemyImg = document.getElementById("vs-enemy");
 
-    document.getElementById("vs-player").src = playerPokemon.front;
-    document.getElementById("vs-enemy").src = enemyPokemon.front;
+    // 🧠 Set the image sources first
+    vsPlayerImg.src = playerPokemon.front;
+    vsEnemyImg.src = enemyPokemon.front;
 
-    setTimeout(() => {
-        vsScreen.style.display = "none";
-        document.querySelector(".container").style.display = "block";
+    // ⏳ Then wait until both are fully loaded before showing screen
+    Promise.all([
+        new Promise(resolve => vsPlayerImg.onload = resolve),
+        new Promise(resolve => vsEnemyImg.onload = resolve)
+    ]).then(() => {
+        vsScreen.style.display = "flex";
+        vsAudio.play();
 
-        document.getElementById("player-name").textContent = playerPokemon.name;
-        document.getElementById("enemy-name").textContent = enemyPokemon.name;
+        // 👇 Continue into battle after 2 sec
+        setTimeout(() => {
+            vsScreen.style.display = "none";
+            document.querySelector(".container").style.display = "block";
 
-        document.getElementById("player-back").src = playerPokemon.back;
-        document.getElementById("enemy-front").src = enemyPokemon.front;
+            document.getElementById("player-name").textContent = playerPokemon.name;
+            document.getElementById("enemy-name").textContent = enemyPokemon.name;
 
-        playerHP = playerPokemon.hp;
-        enemyHP = enemyPokemon.hp;
+            document.getElementById("player-back").src = playerPokemon.back;
+            document.getElementById("enemy-front").src = enemyPokemon.front;
 
-        updateHP("player", playerHP);
-        updateHP("enemy", enemyHP);
+            playerHP = playerPokemon.hp;
+            enemyHP = enemyPokemon.hp;
 
-        setupMoves();
-    }, 2000);
+            updateHP("player", playerHP);
+            updateHP("enemy", enemyHP);
+
+            setupMoves();
+        }, 2000);
+    });
 }
 
 function setupMoves() {
