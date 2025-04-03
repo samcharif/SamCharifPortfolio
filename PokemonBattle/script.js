@@ -4,6 +4,20 @@ let enemyPokemon = null;
 let playerPokemon = null;
 let playerHP, enemyHP;
 
+// === Load Audio Files ===
+const vsAudio = new Audio("https://vgmsite.com/soundtracks/pokemon-gold-silver-gameboy/gjdlwgig/110%20VS%20Trainer.mp3");
+const attackSound = new Audio("https://freesound.org/data/previews/341/341695_3248244-lq.mp3");
+const faintSound = new Audio("https://freesound.org/data/previews/179/179300_2398400-lq.mp3");
+
+// Optional: adjust volume and load
+vsAudio.volume = 0.5;
+attackSound.volume = 0.7;
+faintSound.volume = 0.8;
+
+vsAudio.load();
+attackSound.load();
+faintSound.load();
+
 // === Step 1: Load All Gen 1 Pokémon ===
 async function fetchAllPokemon() {
     for (let i = 1; i <= 150; i++) {
@@ -48,7 +62,6 @@ function selectPokemon(selected) {
     } while (enemyPokemon.id === playerPokemon.id);
 
     document.getElementById("pokemon-select-screen").style.display = "none";
-    document.querySelector(".container").style.display = "block";
 
     startBattle();
 }
@@ -56,14 +69,17 @@ function selectPokemon(selected) {
 // === Step 4: Battle Setup ===
 function startBattle() {
     // Show VS screen
-    document.getElementById("vs-screen").style.display = "flex";
+    const vsScreen = document.getElementById("vs-screen");
+    vsScreen.style.display = "flex";
+
     document.getElementById("vs-player").src = playerPokemon.front;
     document.getElementById("vs-enemy").src = enemyPokemon.front;
 
     vsAudio.play();
 
+    // After 2 seconds, hide VS screen and show battle
     setTimeout(() => {
-        document.getElementById("vs-screen").style.display = "none";
+        vsScreen.style.display = "none";
         document.querySelector(".container").style.display = "block";
 
         document.getElementById("player-name").textContent = playerPokemon.name;
@@ -122,7 +138,7 @@ function handleAttack(index) {
     const total = Math.round((move.damage + variation) * multiplier);
     enemyHP = Math.max(0, enemyHP - total);
 
-    attackSound.play(); // 🔊 Play attack sound
+    attackSound.play();
 
     updateHP("enemy", enemyHP);
     flash("enemy-front");
@@ -134,7 +150,7 @@ function handleAttack(index) {
     log.textContent = `${playerPokemon.name} used ${move.name}! ${effectiveness}`;
 
     if (enemyHP === 0) {
-        faintSound.play(); // 🔊 Enemy faints
+        faintSound.play();
         log.textContent += ` ${enemyPokemon.name} fainted! You win!`;
         disableButtons();
         return;
@@ -147,7 +163,7 @@ function handleAttack(index) {
 
         playerHP = Math.max(0, playerHP - enemyDmg);
 
-        attackSound.play(); // 🔊 Enemy attack sound
+        attackSound.play();
         updateHP("player", playerHP);
         flash("player-back");
 
@@ -158,7 +174,7 @@ function handleAttack(index) {
         log.textContent += ` ${enemyPokemon.name} used ${enemyMove.name}! ${eff}`;
 
         if (playerHP === 0) {
-            faintSound.play(); // 🔊 Player faints
+            faintSound.play();
             log.textContent += ` ${playerPokemon.name} fainted! You lose!`;
             disableButtons();
         }
@@ -182,7 +198,3 @@ function disableButtons() {
 
 // === Load All Pokémon on Page Load ===
 window.addEventListener("DOMContentLoaded", fetchAllPokemon);
-
-const vsAudio = new Audio("vs-intro.mp3");
-const attackSound = new Audio("attack.mp3");
-const faintSound = new Audio("faint.mp3");
