@@ -12,10 +12,18 @@ const titleAudio = new Audio("https://downloads.khinsider.com/game-soundtracks/a
 const attackSound = new Audio("https://freesound.org/data/previews/341/341695_3248244-lq.mp3");
 const faintSound = new Audio("https://freesound.org/data/previews/179/179300_2398400-lq.mp3");
 
+// Optional: Adjust volume
 vsAudio.volume = 0.5;
 victoryAudio.volume = 0.6;
 attackSound.volume = 0.7;
 faintSound.volume = 0.8;
+
+// === Handle Autoplay Restrictions ===
+function playAudio(audio) {
+    return new Promise((resolve, reject) => {
+        audio.play().then(resolve).catch(reject);
+    });
+}
 
 async function fetchAllPokemon() {
     for (let i = 1; i <= 150; i++) {
@@ -52,6 +60,14 @@ function renderPokemonSelection() {
         });
         list.appendChild(card);
     });
+
+    // Play title music after user interaction
+    window.addEventListener("click", () => {
+        if (titleAudio.paused) {
+            titleAudio.loop = true;
+            playAudio(titleAudio);
+        }
+    }, { once: true });
 }
 
 function selectPokemon(selected) {
@@ -63,20 +79,25 @@ function selectPokemon(selected) {
 
     document.getElementById("pokemon-select-screen").style.display = "none";
 
-    setTimeout(startBattle, 200);
+    // ✅ Delay VS screen setup until after images are set properly
+    setTimeout(startBattle, 200); // slight delay ensures image src gets applied
 }
 
 function startBattle() {
+    // Stop the title music and start VS screen
+    titleAudio.pause();
+    titleAudio.currentTime = 0;
     document.getElementById("vs-player").src = playerPokemon.front;
     document.getElementById("vs-enemy").src = enemyPokemon.front;
 
     const vsScreen = document.getElementById("vs-screen");
     vsScreen.style.display = "flex";
 
+    // Start VS music
     vsAudio.currentTime = 0;
-    vsAudio.loop = true;
-    vsAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+    playAudio(vsAudio).catch(err => console.warn("Autoplay blocked:", err));
 
+    // After 2 seconds, show the battlefield
     setTimeout(() => {
         vsScreen.style.display = "none";
         document.querySelector(".container").style.display = "block";
@@ -148,7 +169,7 @@ function handleAttack(index) {
         vsAudio.pause();
         vsAudio.currentTime = 0;
         faintSound.play();
-        victoryAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+        playAudio(victoryAudio).catch(err => console.warn("Autoplay blocked:", err));
         log.textContent += ` ${enemyPokemon.name} fainted! You win!`;
         disableButtons();
         return;
@@ -198,14 +219,14 @@ function disableButtons() {
     document.querySelectorAll("#move-buttons button").forEach(btn => btn.disabled = true);
 }
 
-// === Start Music Only After Interaction ===
 window.addEventListener("DOMContentLoaded", () => {
     fetchAllPokemon();
 
+    // Play title music on first interaction
     window.addEventListener("click", () => {
         if (titleAudio.paused) {
             titleAudio.loop = true;
-            titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+            playAudio(titleAudio).catch(err => console.warn("Autoplay blocked:", err));
         }
     }, { once: true });
 });
