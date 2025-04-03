@@ -231,20 +231,5 @@ window.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
 });
 
-window.addEventListener("DOMContentLoaded", () => {
-    fetchAllPokemon();
-
-    // ⏯️ Play title music ONLY after a click
-    const resumeTitleMusic = () => {
-        if (titleAudio.paused) {
-            titleAudio.loop = true;
-            titleAudio.currentTime = 0;
-            titleAudio.play().catch(err => console.warn("Blocked:", err));
-        }
-        window.removeEventListener("click", resumeTitleMusic);
-    };
-
-    window.addEventListener("click", resumeTitleMusic);
-});
 
 
