@@ -5,20 +5,24 @@ let playerPokemon = null;
 let playerHP, enemyHP;
 
 // === Load Audio Files ===
-const vsAudio = new Audio("https://vgmsite.com/soundtracks/pokemon-gold-silver-gameboy/gjdlwgig/110%20VS%20Trainer.mp3");
+const vsAudio = new Audio("https://kappa.vgmsite.com/soundtracks/pokemon-firered-leafgreen-re-engineered-soundtrack-2004/rlwcxnxcyt/52.%20Final%20Battle%21%20%28Rival%29.mp3");
+const victoryAudio = new Audio("https://kappa.vgmsite.com/soundtracks/pokemon-firered-leafgreen-re-engineered-soundtrack-2004/ppkxdmjzfs/10.%20Victory%21%20%28Trainer%29.mp3");
+const titleAudio = new Audio("https://downloads.khinsider.com/game-soundtracks/album/pokemon-firered-leafgreen-re-engineered-soundtrack-2004/03.%2520Title%2520Screen.mp3");
+
 const attackSound = new Audio("https://freesound.org/data/previews/341/341695_3248244-lq.mp3");
 const faintSound = new Audio("https://freesound.org/data/previews/179/179300_2398400-lq.mp3");
 
-// Optional: adjust volume and load
+// Optional: Adjust volume
 vsAudio.volume = 0.5;
+victoryAudio.volume = 0.6;
 attackSound.volume = 0.7;
 faintSound.volume = 0.8;
 
 vsAudio.load();
+victoryAudio.load();
 attackSound.load();
 faintSound.load();
 
-// === Step 1: Load All Gen 1 Pokémon ===
 async function fetchAllPokemon() {
     for (let i = 1; i <= 150; i++) {
         const res = await fetch(`${pokeAPIBase}${i}`);
@@ -37,7 +41,6 @@ async function fetchAllPokemon() {
     renderPokemonSelection();
 }
 
-// === Step 2: Show Select Screen ===
 function renderPokemonSelection() {
     const list = document.getElementById("pokemon-list");
 
@@ -51,9 +54,12 @@ function renderPokemonSelection() {
         card.addEventListener("click", () => selectPokemon(poke));
         list.appendChild(card);
     });
+
+    // Play title music while selecting
+    titleAudio.loop = true;
+    titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
 }
 
-// === Step 3: On Pokémon Select ===
 function selectPokemon(selected) {
     playerPokemon = selected;
 
@@ -63,21 +69,21 @@ function selectPokemon(selected) {
 
     document.getElementById("pokemon-select-screen").style.display = "none";
 
+    // Stop title music and play battle intro
+    titleAudio.pause();
+    vsAudio.currentTime = 0;
+    vsAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+
     startBattle();
 }
 
-// === Step 4: Battle Setup ===
 function startBattle() {
-    // Show VS screen
     const vsScreen = document.getElementById("vs-screen");
     vsScreen.style.display = "flex";
 
     document.getElementById("vs-player").src = playerPokemon.front;
     document.getElementById("vs-enemy").src = enemyPokemon.front;
 
-    vsAudio.play();
-
-    // After 2 seconds, hide VS screen and show battle
     setTimeout(() => {
         vsScreen.style.display = "none";
         document.querySelector(".container").style.display = "block";
@@ -118,7 +124,6 @@ function setupMoves() {
     });
 }
 
-// === Damage & Turn Logic ===
 function getMultiplier(attackingType, defendingType) {
     const typeChart = {
         electric: { water: 2, grass: 0.5 },
@@ -139,7 +144,6 @@ function handleAttack(index) {
     enemyHP = Math.max(0, enemyHP - total);
 
     attackSound.play();
-
     updateHP("enemy", enemyHP);
     flash("enemy-front");
 
@@ -151,6 +155,9 @@ function handleAttack(index) {
 
     if (enemyHP === 0) {
         faintSound.play();
+        vsAudio.pause();
+        victoryAudio.play();
+
         log.textContent += ` ${enemyPokemon.name} fainted! You win!`;
         disableButtons();
         return;
@@ -175,6 +182,7 @@ function handleAttack(index) {
 
         if (playerHP === 0) {
             faintSound.play();
+            vsAudio.pause();
             log.textContent += ` ${playerPokemon.name} fainted! You lose!`;
             disableButtons();
         }
@@ -196,5 +204,4 @@ function disableButtons() {
     document.querySelectorAll("#move-buttons button").forEach(btn => btn.disabled = true);
 }
 
-// === Load All Pokémon on Page Load ===
 window.addEventListener("DOMContentLoaded", fetchAllPokemon);
