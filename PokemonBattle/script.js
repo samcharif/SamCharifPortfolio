@@ -2,6 +2,7 @@ const pokeAPIBase = "https://pokeapi.co/api/v2/pokemon/";
 let allPokemon = [];
 let enemyPokemon = null;
 let playerPokemon = null;
+let playerHP, enemyHP;
 
 // === Step 1: Load All Gen 1 Pokémon ===
 async function fetchAllPokemon() {
@@ -14,7 +15,8 @@ async function fetchAllPokemon() {
             name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
             type: data.types[0].type.name,
             hp: data.stats.find(stat => stat.stat.name === "hp").base_stat,
-            sprite: data.sprites.front_default
+            front: data.sprites.front_default,
+            back: data.sprites.back_default
         });
     }
 
@@ -29,9 +31,9 @@ function renderPokemonSelection() {
         const card = document.createElement("div");
         card.className = "pokemon-card";
         card.innerHTML = `
-      <img src="${poke.sprite}" alt="${poke.name}" />
-      <span>${poke.name}</span>
-    `;
+          <img src="${poke.front}" alt="${poke.name}" />
+          <span>${poke.name}</span>
+        `;
         card.addEventListener("click", () => selectPokemon(poke));
         list.appendChild(card);
     });
@@ -40,7 +42,11 @@ function renderPokemonSelection() {
 // === Step 3: On Pokémon Select ===
 function selectPokemon(selected) {
     playerPokemon = selected;
-    enemyPokemon = allPokemon[Math.floor(Math.random() * allPokemon.length)];
+
+    // Ensure enemy is not the same as player
+    do {
+        enemyPokemon = allPokemon[Math.floor(Math.random() * allPokemon.length)];
+    } while (enemyPokemon.id === playerPokemon.id);
 
     document.getElementById("pokemon-select-screen").style.display = "none";
     document.querySelector(".container").style.display = "block";
@@ -53,8 +59,8 @@ function startBattle() {
     document.getElementById("player-name").textContent = playerPokemon.name;
     document.getElementById("enemy-name").textContent = enemyPokemon.name;
 
-    document.getElementById("player-back").src = playerPokemon.sprite;
-    document.getElementById("enemy-front").src = enemyPokemon.sprite;
+    document.getElementById("player-back").src = playerPokemon.back;
+    document.getElementById("enemy-front").src = enemyPokemon.front;
 
     playerHP = playerPokemon.hp;
     enemyHP = enemyPokemon.hp;

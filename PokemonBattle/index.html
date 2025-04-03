@@ -4,29 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokémon Battle</title>
-
-    <!-- ✅ Link to your CSS -->
     <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<!-- Pokémon Selection Screen -->
+<!-- 🧩 Pokémon Selection Screen -->
 <div id="pokemon-select-screen">
     <h2>Select Your Pokémon</h2>
     <div id="pokemon-list" class="pokemon-grid"></div>
 </div>
 
-<div class="container">
-
-    <!-- 🔥 Pokémon Battle Layout -->
+<!-- ⚔️ Battle Container (Hidden by Default) -->
+<div class="container" style="display: none;">
     <div id="battlefield">
         <!-- Player Side -->
         <div class="side player-side">
             <div class="sprite-wrapper">
-                <img id="player-back" class="sprite back" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png" alt="Your Pokémon" />
+                <img id="player-back" class="sprite back" src="" alt="Your Pokémon" />
             </div>
             <div class="hp-bar">
-                <strong id="player-name">Pikachu</strong>
+                <strong id="player-name">Player</strong>
                 <div class="bar">
                     <div id="player-hp-bar" class="bar-fill"></div>
                 </div>
@@ -37,10 +34,10 @@
         <!-- Enemy Side -->
         <div class="side enemy-side">
             <div class="sprite-wrapper">
-                <img id="enemy-front" class="sprite front" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Enemy Pokémon" />
+                <img id="enemy-front" class="sprite front" src="" alt="Enemy Pokémon" />
             </div>
             <div class="hp-bar">
-                <strong id="enemy-name">Charmander</strong>
+                <strong id="enemy-name">Enemy</strong>
                 <div class="bar">
                     <div id="enemy-hp-bar" class="bar-fill"></div>
                 </div>
@@ -49,24 +46,14 @@
         </div>
     </div>
 
-    <!-- 🔘 Move Buttons -->
+    <!-- 🟡 Move Buttons -->
     <div id="move-buttons"></div>
 
     <!-- 💬 Battle Log -->
-    <div id="log" class="log-box"></div>
-
+    <div id="log" class="log-box">Choose your move!</div>
 </div>
 
-<!-- Move Buttons -->
-<div id="move-buttons"></div>
-
-<!-- Battle Log -->
-<div id="log" class="log-box">Choose your move!</div>
-
-<!-- Add this before the closing </body> tag -->
-<script src="script.js"></script>
-
-<!-- ✅ Link to your script -->
+<!-- ✅ Load JavaScript -->
 <script src="script.js"></script>
 </body>
 </html>
