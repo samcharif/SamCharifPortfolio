@@ -14,7 +14,7 @@
     <div id="pokemon-list" class="pokemon-grid"></div>
 </div>
 
-<!-- ⚔️ Battle Container (Hidden by Default) -->
+<!-- ⚔️ Battle Container -->
 <div class="container" style="display: none;">
     <div id="battlefield">
         <!-- Player Side -->
@@ -53,16 +53,22 @@
     <div id="log" class="log-box">Choose your move!</div>
 </div>
 
-<!-- 🎬 VS Screen (now properly inside body) -->
+<!-- 🔥 VS Screen -->
 <div id="vs-screen" class="vs-screen">
     <div class="vs-container">
-        <img id="vs-player" src="" alt="Player Pokémon" />
+        <div>
+            <img id="vs-player" src="" alt="Player Pokémon" />
+            <div>Player<br>Pokémon</div>
+        </div>
         <span class="vs-text">VS</span>
-        <img id="vs-enemy" src="" alt="Enemy Pokémon" />
+        <div>
+            <img id="vs-enemy" src="" alt="Enemy Pokémon" />
+            <div>Enemy<br>Pokémon</div>
+        </div>
     </div>
 </div>
 
-<!-- ✅ Load JavaScript -->
+<!-- Script -->
 <script src="script.js"></script>
 </body>
 </html>

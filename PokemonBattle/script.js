@@ -82,11 +82,10 @@ function startBattle() {
     const vsPlayerImg = document.getElementById("vs-player");
     const vsEnemyImg = document.getElementById("vs-enemy");
 
-    // 🧠 Set the image sources first
+    // Set image sources before showing
     vsPlayerImg.src = playerPokemon.front;
     vsEnemyImg.src = enemyPokemon.front;
 
-    // ⏳ Then wait until both are fully loaded before showing screen
     Promise.all([
         new Promise(resolve => vsPlayerImg.onload = resolve),
         new Promise(resolve => vsEnemyImg.onload = resolve)
@@ -94,7 +93,6 @@ function startBattle() {
         vsScreen.style.display = "flex";
         vsAudio.play();
 
-        // 👇 Continue into battle after 2 sec
         setTimeout(() => {
             vsScreen.style.display = "none";
             document.querySelector(".container").style.display = "block";

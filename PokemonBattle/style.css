@@ -39,29 +39,36 @@ body {
     margin-bottom: 0.5em;
 }
 
-.pokemon-name {
-    font-weight: bold;
-    font-size: 1.1em;
-    margin-top: 0.5em;
+.sprite {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
 }
 
-.hp-label {
-    margin-top: 0.5em;
-    font-size: 0.9em;
+.back {
+    transform: scaleX(-1);
 }
 
-.hp-bar-container {
-    background: #ddd;
-    border-radius: 6px;
+.hp-bar {
+    flex: 1;
+    max-width: 250px;
+    padding: 0.5em;
+    background-color: #ddd;
+    border-radius: 8px;
+    text-align: center;
+    margin: 0 1em;
+}
+
+.bar {
     height: 10px;
-    width: 100%;
-    margin-top: 0.25em;
+    background-color: #ccc;
+    border-radius: 4px;
     overflow: hidden;
 }
 
-.hp-bar-fill {
-    background: #4caf50;
+.bar-fill {
     height: 100%;
+    background-color: #4caf50;
     width: 100%;
     transition: width 0.3s ease;
 }
@@ -112,6 +119,7 @@ body {
     100% { filter: brightness(1); }
 }
 
+/* Pokémon Selection Grid */
 #pokemon-select-screen {
     margin-bottom: 2em;
 }
@@ -151,51 +159,35 @@ body {
     margin-top: 0.5em;
 }
 
-.vs-screen {
+/* === VS Screen Styles === */
+#vs-screen {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(#fff, #cce5ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(#ffffff, #cce5ff);
     z-index: 9999;
-    animation: fadeOut 1.5s ease 2s forwards;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .vs-container {
     display: flex;
     align-items: center;
     gap: 2em;
-    animation: popVs 1s ease;
 }
 
 .vs-container img {
-    width: 100px;
-    height: 100px;
+    width: 96px;
+    height: 96px;
     image-rendering: pixelated;
 }
 
 .vs-text {
     font-size: 3em;
-    font-weight: bold;
     color: red;
-    animation: pulse 1s infinite alternate;
+    font-weight: bold;
 }
-
-@keyframes pulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.2); }
-}
-
-@keyframes fadeOut {
-    to { opacity: 0; visibility: hidden; }
-}
-
-@keyframes popVs {
-    from { transform: scale(0); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
