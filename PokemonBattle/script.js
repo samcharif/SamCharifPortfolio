@@ -45,6 +45,7 @@ async function fetchAllPokemon() {
 
 function renderPokemonSelection() {
     const list = document.getElementById("pokemon-list");
+    list.innerHTML = ""; // ✅ CLEAR before re-rendering
 
     allPokemon.forEach(poke => {
         const card = document.createElement("div");
@@ -53,21 +54,16 @@ function renderPokemonSelection() {
             <img src="${poke.front}" alt="${poke.name}" />
             <span>${poke.name}</span>
         `;
-        card.addEventListener("click", () => {
-            titleAudio.pause();
-            titleAudio.currentTime = 0;
-            selectPokemon(poke);
-        });
+        card.addEventListener("click", () => selectPokemon(poke));
         list.appendChild(card);
     });
 
-    // Play title music after user interaction
-    window.addEventListener("click", () => {
-        if (titleAudio.paused) {
-            titleAudio.loop = true;
-            playAudio(titleAudio);
-        }
-    }, { once: true });
+    // Title music (optional: only play once)
+    if (titleAudio.paused) {
+        titleAudio.loop = true;
+        titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+    }
+}
 }
 
 function selectPokemon(selected) {
