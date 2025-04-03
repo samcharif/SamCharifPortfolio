@@ -230,3 +230,13 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }, { once: true });
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+    fetchAllPokemon();
+
+    window.addEventListener("click", () => {
+        titleAudio.loop = true;
+        titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+    }, { once: true });
+});
+
