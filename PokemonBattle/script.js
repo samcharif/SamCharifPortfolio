@@ -12,16 +12,10 @@ const titleAudio = new Audio("https://downloads.khinsider.com/game-soundtracks/a
 const attackSound = new Audio("https://freesound.org/data/previews/341/341695_3248244-lq.mp3");
 const faintSound = new Audio("https://freesound.org/data/previews/179/179300_2398400-lq.mp3");
 
-// Optional: Adjust volume
 vsAudio.volume = 0.5;
 victoryAudio.volume = 0.6;
 attackSound.volume = 0.7;
 faintSound.volume = 0.8;
-
-vsAudio.load();
-victoryAudio.load();
-attackSound.load();
-faintSound.load();
 
 async function fetchAllPokemon() {
     for (let i = 1; i <= 150; i++) {
@@ -51,13 +45,13 @@ function renderPokemonSelection() {
             <img src="${poke.front}" alt="${poke.name}" />
             <span>${poke.name}</span>
         `;
-        card.addEventListener("click", () => selectPokemon(poke));
+        card.addEventListener("click", () => {
+            titleAudio.pause();
+            titleAudio.currentTime = 0;
+            selectPokemon(poke);
+        });
         list.appendChild(card);
     });
-
-    // Play title music while selecting
-    titleAudio.loop = true;
-    titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
 }
 
 function selectPokemon(selected) {
@@ -69,23 +63,20 @@ function selectPokemon(selected) {
 
     document.getElementById("pokemon-select-screen").style.display = "none";
 
-    // ✅ Delay VS screen setup until after images are set properly
-    setTimeout(startBattle, 200); // slight delay ensures image src gets applied
+    setTimeout(startBattle, 200);
 }
+
 function startBattle() {
-    // ✅ Set VS image sources before showing the VS screen
     document.getElementById("vs-player").src = playerPokemon.front;
     document.getElementById("vs-enemy").src = enemyPokemon.front;
 
-    // ✅ Now show the VS screen after setting src
     const vsScreen = document.getElementById("vs-screen");
     vsScreen.style.display = "flex";
 
-    // VS music
     vsAudio.currentTime = 0;
+    vsAudio.loop = true;
     vsAudio.play().catch(err => console.warn("Autoplay blocked:", err));
 
-    // After 2 seconds, show the battlefield
     setTimeout(() => {
         vsScreen.style.display = "none";
         document.querySelector(".container").style.display = "block";
@@ -103,7 +94,6 @@ function startBattle() {
         setupMoves();
     }, 2000);
 }
-
 
 function setupMoves() {
     const moveButtons = document.getElementById("move-buttons");
@@ -154,17 +144,18 @@ function handleAttack(index) {
 
     log.textContent = `${playerPokemon.name} used ${move.name}! ${effectiveness}`;
 
-    // ✅ Stop here if enemy faints
     if (enemyHP === 0) {
+        vsAudio.pause();
+        vsAudio.currentTime = 0;
         faintSound.play();
+        victoryAudio.play().catch(err => console.warn("Autoplay blocked:", err));
         log.textContent += ` ${enemyPokemon.name} fainted! You win!`;
         disableButtons();
         return;
     }
 
-    // 🕒 Delayed enemy turn (only if enemy is still alive)
     setTimeout(() => {
-        if (enemyHP <= 0) return; // ✅ Safeguard
+        if (enemyHP <= 0) return;
 
         const enemyMove = { name: "Enemy Tackle", damage: 20, type: "normal" };
         const enemyMult = getMultiplier(enemyMove.type, playerPokemon.type);
@@ -183,6 +174,8 @@ function handleAttack(index) {
         log.textContent += ` ${enemyPokemon.name} used ${enemyMove.name}! ${eff}`;
 
         if (playerHP === 0) {
+            vsAudio.pause();
+            vsAudio.currentTime = 0;
             faintSound.play();
             log.textContent += ` ${playerPokemon.name} fainted! You lose!`;
             disableButtons();
@@ -205,4 +198,14 @@ function disableButtons() {
     document.querySelectorAll("#move-buttons button").forEach(btn => btn.disabled = true);
 }
 
-window.addEventListener("DOMContentLoaded", fetchAllPokemon);
+// === Start Music Only After Interaction ===
+window.addEventListener("DOMContentLoaded", () => {
+    fetchAllPokemon();
+
+    window.addEventListener("click", () => {
+        if (titleAudio.paused) {
+            titleAudio.loop = true;
+            titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
+        }
+    }, { once: true });
+});
