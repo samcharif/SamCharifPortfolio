@@ -153,17 +153,18 @@ function handleAttack(index) {
 
     log.textContent = `${playerPokemon.name} used ${move.name}! ${effectiveness}`;
 
+    // ✅ Stop here if enemy faints
     if (enemyHP === 0) {
         faintSound.play();
-        vsAudio.pause();
-        victoryAudio.play();
-
         log.textContent += ` ${enemyPokemon.name} fainted! You win!`;
         disableButtons();
         return;
     }
 
+    // 🕒 Delayed enemy turn (only if enemy is still alive)
     setTimeout(() => {
+        if (enemyHP <= 0) return; // ✅ Safeguard
+
         const enemyMove = { name: "Enemy Tackle", damage: 20, type: "normal" };
         const enemyMult = getMultiplier(enemyMove.type, playerPokemon.type);
         const enemyDmg = Math.round((enemyMove.damage + variation) * enemyMult);
@@ -182,7 +183,6 @@ function handleAttack(index) {
 
         if (playerHP === 0) {
             faintSound.play();
-            vsAudio.pause();
             log.textContent += ` ${playerPokemon.name} fainted! You lose!`;
             disableButtons();
         }
