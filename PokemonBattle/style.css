@@ -111,3 +111,43 @@ body {
     50% { filter: brightness(0.5); }
     100% { filter: brightness(1); }
 }
+
+#pokemon-select-screen {
+    margin-bottom: 2em;
+}
+
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1em;
+    max-height: 500px;
+    overflow-y: scroll;
+    padding: 1em;
+}
+
+.pokemon-card {
+    border: 2px solid #3b4cca;
+    border-radius: 10px;
+    padding: 0.5em;
+    background: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.pokemon-card:hover {
+    transform: scale(1.05);
+    background: #e6f0ff;
+}
+
+.pokemon-card img {
+    width: 72px;
+    height: 72px;
+}
+
+.pokemon-card span {
+    display: block;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-top: 0.5em;
+}
+
