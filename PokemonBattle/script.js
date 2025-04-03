@@ -55,19 +55,31 @@ function selectPokemon(selected) {
 
 // === Step 4: Battle Setup ===
 function startBattle() {
-    document.getElementById("player-name").textContent = playerPokemon.name;
-    document.getElementById("enemy-name").textContent = enemyPokemon.name;
+    // Show VS screen
+    document.getElementById("vs-screen").style.display = "flex";
+    document.getElementById("vs-player").src = playerPokemon.front;
+    document.getElementById("vs-enemy").src = enemyPokemon.front;
 
-    document.getElementById("player-back").src = playerPokemon.back;
-    document.getElementById("enemy-front").src = enemyPokemon.front;
+    vsAudio.play();
 
-    playerHP = playerPokemon.hp;
-    enemyHP = enemyPokemon.hp;
+    setTimeout(() => {
+        document.getElementById("vs-screen").style.display = "none";
+        document.querySelector(".container").style.display = "block";
 
-    updateHP("player", playerHP);
-    updateHP("enemy", enemyHP);
+        document.getElementById("player-name").textContent = playerPokemon.name;
+        document.getElementById("enemy-name").textContent = enemyPokemon.name;
 
-    setupMoves();
+        document.getElementById("player-back").src = playerPokemon.back;
+        document.getElementById("enemy-front").src = enemyPokemon.front;
+
+        playerHP = playerPokemon.hp;
+        enemyHP = enemyPokemon.hp;
+
+        updateHP("player", playerHP);
+        updateHP("enemy", enemyHP);
+
+        setupMoves();
+    }, 2000);
 }
 
 function setupMoves() {
@@ -110,6 +122,8 @@ function handleAttack(index) {
     const total = Math.round((move.damage + variation) * multiplier);
     enemyHP = Math.max(0, enemyHP - total);
 
+    attackSound.play(); // 🔊 Play attack sound
+
     updateHP("enemy", enemyHP);
     flash("enemy-front");
 
@@ -120,10 +134,37 @@ function handleAttack(index) {
     log.textContent = `${playerPokemon.name} used ${move.name}! ${effectiveness}`;
 
     if (enemyHP === 0) {
+        faintSound.play(); // 🔊 Enemy faints
         log.textContent += ` ${enemyPokemon.name} fainted! You win!`;
         disableButtons();
         return;
     }
+
+    setTimeout(() => {
+        const enemyMove = { name: "Enemy Tackle", damage: 20, type: "normal" };
+        const enemyMult = getMultiplier(enemyMove.type, playerPokemon.type);
+        const enemyDmg = Math.round((enemyMove.damage + variation) * enemyMult);
+
+        playerHP = Math.max(0, playerHP - enemyDmg);
+
+        attackSound.play(); // 🔊 Enemy attack sound
+        updateHP("player", playerHP);
+        flash("player-back");
+
+        let eff = "";
+        if (enemyMult > 1) eff = "It’s super effective!";
+        else if (enemyMult < 1) eff = "It’s not very effective...";
+
+        log.textContent += ` ${enemyPokemon.name} used ${enemyMove.name}! ${eff}`;
+
+        if (playerHP === 0) {
+            faintSound.play(); // 🔊 Player faints
+            log.textContent += ` ${playerPokemon.name} fainted! You lose!`;
+            disableButtons();
+        }
+    }, 1000);
+}
+
 
     // Only proceed if enemy is still alive
     setTimeout(() => {
@@ -168,3 +209,7 @@ function disableButtons() {
 
 // === Load All Pokémon on Page Load ===
 window.addEventListener("DOMContentLoaded", fetchAllPokemon);
+
+const vsAudio = new Audio("vs-intro.mp3");
+const attackSound = new Audio("attack.mp3");
+const faintSound = new Audio("faint.mp3");
