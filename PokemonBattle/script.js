@@ -31,8 +31,8 @@ function renderPokemonSelection() {
         const card = document.createElement("div");
         card.className = "pokemon-card";
         card.innerHTML = `
-          <img src="${poke.front}" alt="${poke.name}" />
-          <span>${poke.name}</span>
+            <img src="${poke.front}" alt="${poke.name}" />
+            <span>${poke.name}</span>
         `;
         card.addEventListener("click", () => selectPokemon(poke));
         list.appendChild(card);
@@ -43,7 +43,6 @@ function renderPokemonSelection() {
 function selectPokemon(selected) {
     playerPokemon = selected;
 
-    // Ensure enemy is not the same as player
     do {
         enemyPokemon = allPokemon[Math.floor(Math.random() * allPokemon.length)];
     } while (enemyPokemon.id === playerPokemon.id);
@@ -126,10 +125,14 @@ function handleAttack(index) {
         return;
     }
 
+    // Only proceed if enemy is still alive
     setTimeout(() => {
+        if (enemyHP <= 0) return;
+
         const enemyMove = { name: "Enemy Tackle", damage: 20, type: "normal" };
         const enemyMult = getMultiplier(enemyMove.type, playerPokemon.type);
-        const enemyDmg = Math.round((enemyMove.damage + variation) * enemyMult);
+        const enemyVariation = Math.floor(Math.random() * 6) - 3;
+        const enemyDmg = Math.round((enemyMove.damage + enemyVariation) * enemyMult);
 
         playerHP = Math.max(0, playerHP - enemyDmg);
         updateHP("player", playerHP);
