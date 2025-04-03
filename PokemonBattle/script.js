@@ -234,9 +234,17 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("DOMContentLoaded", () => {
     fetchAllPokemon();
 
-    window.addEventListener("click", () => {
-        titleAudio.loop = true;
-        titleAudio.play().catch(err => console.warn("Autoplay blocked:", err));
-    }, { once: true });
+    // ⏯️ Play title music ONLY after a click
+    const resumeTitleMusic = () => {
+        if (titleAudio.paused) {
+            titleAudio.loop = true;
+            titleAudio.currentTime = 0;
+            titleAudio.play().catch(err => console.warn("Blocked:", err));
+        }
+        window.removeEventListener("click", resumeTitleMusic);
+    };
+
+    window.addEventListener("click", resumeTitleMusic);
 });
+
 
