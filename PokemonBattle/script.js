@@ -69,50 +69,41 @@ function selectPokemon(selected) {
 
     document.getElementById("pokemon-select-screen").style.display = "none";
 
-    // Stop title music and play battle intro
-    titleAudio.pause();
+    // ✅ Delay VS screen setup until after images are set properly
+    setTimeout(startBattle, 200); // slight delay ensures image src gets applied
+}
+function startBattle() {
+    // ✅ Set VS image sources before showing the VS screen
+    document.getElementById("vs-player").src = playerPokemon.front;
+    document.getElementById("vs-enemy").src = enemyPokemon.front;
+
+    // ✅ Now show the VS screen after setting src
+    const vsScreen = document.getElementById("vs-screen");
+    vsScreen.style.display = "flex";
+
+    // VS music
     vsAudio.currentTime = 0;
     vsAudio.play().catch(err => console.warn("Autoplay blocked:", err));
 
-    startBattle();
+    // After 2 seconds, show the battlefield
+    setTimeout(() => {
+        vsScreen.style.display = "none";
+        document.querySelector(".container").style.display = "block";
+
+        document.getElementById("player-name").textContent = playerPokemon.name;
+        document.getElementById("enemy-name").textContent = enemyPokemon.name;
+        document.getElementById("player-back").src = playerPokemon.back;
+        document.getElementById("enemy-front").src = enemyPokemon.front;
+
+        playerHP = playerPokemon.hp;
+        enemyHP = enemyPokemon.hp;
+
+        updateHP("player", playerHP);
+        updateHP("enemy", enemyHP);
+        setupMoves();
+    }, 2000);
 }
 
-function startBattle() {
-    const vsScreen = document.getElementById("vs-screen");
-    const vsPlayerImg = document.getElementById("vs-player");
-    const vsEnemyImg = document.getElementById("vs-enemy");
-
-    // Set image sources before showing
-    vsPlayerImg.src = playerPokemon.front;
-    vsEnemyImg.src = enemyPokemon.front;
-
-    Promise.all([
-        new Promise(resolve => vsPlayerImg.onload = resolve),
-        new Promise(resolve => vsEnemyImg.onload = resolve)
-    ]).then(() => {
-        vsScreen.style.display = "flex";
-        vsAudio.play();
-
-        setTimeout(() => {
-            vsScreen.style.display = "none";
-            document.querySelector(".container").style.display = "block";
-
-            document.getElementById("player-name").textContent = playerPokemon.name;
-            document.getElementById("enemy-name").textContent = enemyPokemon.name;
-
-            document.getElementById("player-back").src = playerPokemon.back;
-            document.getElementById("enemy-front").src = enemyPokemon.front;
-
-            playerHP = playerPokemon.hp;
-            enemyHP = enemyPokemon.hp;
-
-            updateHP("player", playerHP);
-            updateHP("enemy", enemyHP);
-
-            setupMoves();
-        }, 2000);
-    });
-}
 
 function setupMoves() {
     const moveButtons = document.getElementById("move-buttons");
