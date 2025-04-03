@@ -29,12 +29,14 @@ body {
     background: #f1f1f1;
     width: 45%;
     position: relative;
+    background: linear-gradient(to bottom, #f9f9f9, #e6f0ff);
 }
 
 .pokemon img {
     width: 100px;
     height: 100px;
     image-rendering: pixelated;
+    margin-bottom: 0.5em;
 }
 
 .pokemon-name {
