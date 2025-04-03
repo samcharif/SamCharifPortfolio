@@ -95,3 +95,17 @@ footer {
     color: #fff;
     margin-top: 2em;
 }
+
+.project-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-card a:hover {
+    text-decoration: underline;
+}
+
+.project-card p a {
+    text-decoration: none;
+}
+
