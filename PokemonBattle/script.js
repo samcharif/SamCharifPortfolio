@@ -165,33 +165,6 @@ function handleAttack(index) {
     }, 1000);
 }
 
-
-    // Only proceed if enemy is still alive
-    setTimeout(() => {
-        if (enemyHP <= 0) return;
-
-        const enemyMove = { name: "Enemy Tackle", damage: 20, type: "normal" };
-        const enemyMult = getMultiplier(enemyMove.type, playerPokemon.type);
-        const enemyVariation = Math.floor(Math.random() * 6) - 3;
-        const enemyDmg = Math.round((enemyMove.damage + enemyVariation) * enemyMult);
-
-        playerHP = Math.max(0, playerHP - enemyDmg);
-        updateHP("player", playerHP);
-        flash("player-back");
-
-        let eff = "";
-        if (enemyMult > 1) eff = "It’s super effective!";
-        else if (enemyMult < 1) eff = "It’s not very effective...";
-
-        log.textContent += ` ${enemyPokemon.name} used ${enemyMove.name}! ${eff}`;
-
-        if (playerHP === 0) {
-            log.textContent += ` ${playerPokemon.name} fainted! You lose!`;
-            disableButtons();
-        }
-    }, 1000);
-}
-
 function updateHP(who, hp) {
     document.getElementById(`${who}-hp`).textContent = hp;
     document.getElementById(`${who}-hp-bar`).style.width = `${hp}%`;
