@@ -1,0 +1,12 @@
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\bin\Debug\net8.0\ClinicIntakeApp.Core.deps.json
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\bin\Debug\net8.0\ClinicIntakeApp.Core.dll
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\bin\Debug\net8.0\ClinicIntakeApp.Core.pdb
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.AssemblyInfoInputs.cache
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.AssemblyInfo.cs
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.csproj.CoreCompileInputs.cache
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.sourcelink.json
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.dll
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\refint\ClinicIntakeApp.Core.dll
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ClinicIntakeApp.Core.pdb
+C:\Users\samch\RiderProjects\SamCharifPortfolio\ClinicIntakeApp.Core\obj\Debug\net8.0\ref\ClinicIntakeApp.Core.dll

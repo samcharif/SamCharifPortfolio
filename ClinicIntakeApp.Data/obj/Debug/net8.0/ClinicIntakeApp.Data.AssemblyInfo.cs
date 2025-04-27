@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ClinicIntakeApp.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+beaa28da7d6ac9df2a3e8626591b7c085295c00e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f2ab7d3c25ec584addbcdb861b28a367acb7aa4")]
 [assembly: System.Reflection.AssemblyProductAttribute("ClinicIntakeApp.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ClinicIntakeApp.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
