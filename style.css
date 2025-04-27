@@ -57,15 +57,33 @@ section {
 
 .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5em;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    align-items: start;
+    margin-top: 2rem;
+    padding: 1rem;
 }
 
 .project-card {
-    background: white;
-    padding: 1.5em;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-radius: 10px;
+    background-color: white;
+    border-radius: 1rem; /* rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* soft shadow */
+    overflow: hidden;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 1rem;
 }
 
 form {
@@ -99,10 +117,6 @@ footer {
 .project-card a {
     text-decoration: none;
     color: inherit;
-}
-
-.project-card a:hover {
-    text-decoration: underline;
 }
 
 .project-card p a {
