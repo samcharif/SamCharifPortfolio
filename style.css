@@ -131,3 +131,17 @@ footer {
 .project-card a:hover {
     text-decoration: underline;
 }
+.project-card img {
+    width: 150px;   /* or whatever size looks good */
+    height: 150px;  /* force height too for consistency */
+    object-fit: contain; /* makes sure images scale without stretching */
+    margin: 0 auto; /* center image horizontally */
+    display: block;
+}
+.project-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    margin: 0 auto 20px auto; /* 20px bottom margin for space below image */
+    display: block;
+}
